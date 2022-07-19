@@ -4,15 +4,10 @@ import { CreateRoom } from "./routes/CreateRoom";
 import { Room } from "./routes/Room";
 import { useEffect } from "react";
 
-const Child = ({a}) => { console.log("child renders") ; return (
-  <div>Child Component {a}</div>
-)}
+
 
 function App() {
-  let a = 123
-  useEffect(()=>{
-    a = 233
-  }, [])
+
   return (
     <div className="App" style={{display: 'grid', placeItems: 'center', height: '100vh'}}>
       <BrowserRouter>
@@ -21,7 +16,6 @@ function App() {
           <Route path={"/room/:roomId"} ><Room /></Route>
         </Switch>
       </BrowserRouter>
-      <Child a={a}/>
     </div>
   );
 }
