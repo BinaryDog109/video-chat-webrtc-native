@@ -4,7 +4,7 @@ const { Server } = require("socket.io");
 const cors = require('cors')
 const io = new Server(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: '*',
         
     }
 })
@@ -15,16 +15,17 @@ const rooms = {}
 io.on('connection', socket => {
     socket.on('join room', roomId => { 
         const currentUserSocketId = socket.id
+        console.log("joining room!")
         // The front end will pulling the room id from url
 
         // if the room already exists, push the new user. Otherwise create an entry in the rooms object
-        socket.join(roomId)
+        socket.join(roomId) 
         if (rooms[roomId]) {
             rooms[roomId].push(currentUserSocketId)
         }
         else {
             rooms[roomId] = [currentUserSocketId]
-        } 
+        }  
         console.log(`Current rooms: `, rooms)
         // !Get the other user's socket id (any time only two people in a room)
         const otherUserSocketId = rooms[roomId].find(userSocketId => userSocketId !== currentUserSocketId)
@@ -33,8 +34,8 @@ io.on('connection', socket => {
             socket.emit('other user', otherUserSocketId)
             // inform other user
             socket.to(otherUserSocketId).emit("user joined", currentUserSocketId)
-        }
-
+        } 
+     
         socket.on('disconnect', () => { 
             console.log(`${socket.id} has disconnected`)
             const disconnectedUser = socket.id
@@ -62,6 +63,10 @@ io.on('connection', socket => {
         io.to(payload.target).emit('ice-candidate', payload.candidate)
     })
 
+    // After handshaking
+    socket.on('answer received', otherUser => {
+        io.to(otherUser).emit('connected')
+    })
     
 })
 

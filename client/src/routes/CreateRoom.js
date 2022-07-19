@@ -7,6 +7,13 @@ export const CreateRoom = () => {
         history.push(`/room/${uuid()}`)
     }
   return (
-    <button onClick={onHandleCreateRoom}>Create a room</button>
+    
+      <button style={{
+      padding: '1em',
+      fontSize: '1.5em',
+      backgroundColor: 'lightgreen'
+    }} onClick={onHandleCreateRoom}>Create a room</button>
+    
+    
   )
 }

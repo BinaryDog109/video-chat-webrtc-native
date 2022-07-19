@@ -43,8 +43,6 @@ export const Room = () => {
     [createPeer]
   );
 
-
-
   const handleReceiveCall = useCallback(
     async (payload) => {
       try {
@@ -54,15 +52,15 @@ export const Room = () => {
         const pc = pcRef.current;
         await pc.setRemoteDescription(remoteDesc);
         localStream
-          .getTracks()
+          .getTracks() 
           .forEach((track) => pc.addTrack(track, localStream));
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
         const answerPayload = {
-          target: payload.caller,
+          target: payload.caller,  
           caller: socketRef.current.id,
           description: pc.localDescription,
-        };
+        };     
         socketRef.current.emit("answer", answerPayload);
       } catch (error) {
         console.log("error in handleReceiveCall: ", error);
@@ -122,10 +120,10 @@ export const Room = () => {
     const pc = pcRef.current;
     // Close current webcam
     if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach(track => track.stop())
-        localStreamRef.current = null
+      localStreamRef.current.getTracks().forEach((track) => track.stop());
+      localStreamRef.current = null;
     }
-    
+
     if (pc) {
       // Remove all its event liseners
       pc.ontrack = null;
@@ -145,7 +143,7 @@ export const Room = () => {
         video.removeAttribute("src");
         video.removeAttribute("srcObject");
       });
-      
+
       console.log("Removed all tracks");
       pc.close();
       pcRef.current = null;
@@ -192,13 +190,22 @@ export const Room = () => {
   };
   return (
     <>
-      <div>
+      <div style={{display: 'flex', gap: '1em'}}>
         <video autoPlay ref={userVideo}></video>
         <video autoPlay ref={otherVideo}></video>
+        
       </div>
-      <button onClick={onHangup} className="hangup-button">
-        Hang up
-      </button>
+      <button
+          style={{
+            padding: "1em",
+            fontSize: "1.5em",
+            backgroundColor: "orange",
+          }}
+          onClick={onHangup}
+          className="hangup-button"
+        >
+          Hang up
+        </button>
     </>
   );
 };
