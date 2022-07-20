@@ -42,12 +42,15 @@ io.on('connection', socket => {
             const index = rooms[roomId].indexOf(disconnectedUser)
             // !maybe consider a map 
             rooms[roomId].splice(index, 1)
+            
             socket.to(roomId).emit('user left', disconnectedUser)
+
+            // If no user in the room, remove the room
+            if (rooms[roomId].length === 0) {
+                delete rooms[roomId]
+            }
         }) 
-        socket.on('user hangup', () => {
-            const disconnectedUser = socket.id 
-            socket.to(roomId).emit('user left', disconnectedUser)
-        }) 
+        
     })
 
     // Receive and sending offer/answer to the target
