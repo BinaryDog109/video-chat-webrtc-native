@@ -40,14 +40,14 @@ io.on('connection', socket => {
             console.log(`${socket.id} has disconnected`)
             const disconnectedUser = socket.id
             const index = rooms[roomId].indexOf(disconnectedUser)
-            // !maybe consider a map
+            // !maybe consider a map 
             rooms[roomId].splice(index, 1)
             socket.to(roomId).emit('user left', disconnectedUser)
-        })
+        }) 
         socket.on('user hangup', () => {
-            const disconnectedUser = socket.id
+            const disconnectedUser = socket.id 
             socket.to(roomId).emit('user left', disconnectedUser)
-        })
+        }) 
     })
 
     // Receive and sending offer/answer to the target

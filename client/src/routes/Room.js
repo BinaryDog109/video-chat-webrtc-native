@@ -99,7 +99,7 @@ export const Room = () => {
   function handleRemoteTrack(event) {
     otherVideo.current.srcObject = event.streams[0];
   }
-
+ 
   async function handleNegotiationNeeded(userId) {
     try {
       const pc = pcRef.current;
