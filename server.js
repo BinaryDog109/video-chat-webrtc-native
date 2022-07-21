@@ -28,12 +28,12 @@ io.on('connection', socket => {
         }  
         console.log(`Current rooms: `, rooms)
         // !Get the other user's socket id (any time only two people in a room)
-        const otherUserSocketId = rooms[roomId].find(userSocketId => userSocketId !== currentUserSocketId)
-        if (otherUserSocketId) {
+        const otherUserSocketIds = rooms[roomId].filter(userSocketId => userSocketId !== currentUserSocketId)
+        if (otherUserSocketIds.length > 0) {
             // inform current user that there are other users in the room
-            socket.emit('other user', otherUserSocketId)
-            // inform other user
-            socket.to(otherUserSocketId).emit("user joined", currentUserSocketId)
+            socket.emit('other users', otherUserSocketIds)
+            // inform other users
+            socket.to(roomId).emit("user joined", currentUserSocketId)
         } 
      
         socket.on('disconnect', () => { 
@@ -49,8 +49,8 @@ io.on('connection', socket => {
             if (rooms[roomId].length === 0) {
                 delete rooms[roomId]
             }
-        }) 
-        
+        })   
+         
     })
 
     // Receive and sending offer/answer to the target
@@ -63,12 +63,13 @@ io.on('connection', socket => {
   
     // Receive and sending icecandidate
     socket.on('ice-candidate', payload => {
-        io.to(payload.target).emit('ice-candidate', payload.candidate)
+        io.to(payload.target).emit('ice-candidate', payload)
     })
 
-    // After handshaking
+    // After handshaking 
     socket.on('answer received', otherUser => {
-        io.to(otherUser).emit('connected')
+        console.log(`Sent answer received event to ${otherUser}`)
+        io.to(otherUser).emit('connected', socket.id)
     })
     
 })
