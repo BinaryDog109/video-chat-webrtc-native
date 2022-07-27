@@ -31,7 +31,7 @@ io.on('connection', socket => {
         const otherUserSocketIds = rooms[roomId].filter(userSocketId => userSocketId !== currentUserSocketId)
         if (otherUserSocketIds.length > 0) {
             // inform current user that there are other users in the room
-            socket.emit('other users', otherUserSocketIds)
+            socket.emit('other users', otherUserSocketIds) 
             // inform other users
             socket.to(roomId).emit("user joined", currentUserSocketId)
         } 
@@ -62,10 +62,10 @@ io.on('connection', socket => {
     })
   
     // Receive and sending icecandidate
-    socket.on('ice-candidate', payload => {
-        io.to(payload.target).emit('ice-candidate', payload)
+    socket.on(`ice-candidate-${socket.id}`, payload => {
+        io.to(payload.target).emit(`ice-candidate-${socket.id}`, payload)
     })
-
+ 
     // After handshaking 
     socket.on('answer received', otherUser => {
         console.log(`Sent answer received event to ${otherUser}`)
