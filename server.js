@@ -69,7 +69,7 @@ io.on('connection', socket => {
     // After handshaking 
     socket.on('answer received', otherUser => {
         console.log(`Sent answer received event to ${otherUser}`)
-        io.to(otherUser).emit('connected', socket.id)
+        io.to(otherUser).emit('answer received', socket.id)
     })
     
 })
