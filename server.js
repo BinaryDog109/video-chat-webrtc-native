@@ -1,4 +1,8 @@
 const app = require("express")()
+app.use(express.static('public'))
+app.get('/', (req, res) => {
+    res.sendFile('index.html', {root: path.join(__dirname, 'public')});
+  })
 const server = require('http').createServer(app)
 const { Server } = require("socket.io");
 const cors = require('cors')
@@ -75,3 +79,5 @@ io.on('connection', socket => {
 })
 
 server.listen(8000)
+
+module.exports = server
