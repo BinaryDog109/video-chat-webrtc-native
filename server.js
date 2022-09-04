@@ -80,4 +80,4 @@ io.on('connection', socket => {
 
 server.listen(8000)
 
-module.exports = server
+module.exports = app
